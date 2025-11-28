@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Key Config</title>
+    <style>
+        body {
+            width: 450px; /* Slightly wider for complex keys like "Ctrl+Shift+F" */
+            font-family: 'Segoe UI', sans-serif;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+
+        h3 { margin-top: 0; text-align: center; margin-bottom: 5px;}
+        p { font-size: 12px; color: #666; text-align: center; margin-bottom: 15px; }
+
+        /* Headers */
+        .header {
+            display: flex;
+            color: #333; 
+            padding: 8px 5px;
+            font-weight: bold;
+            font-size: 12px;
+            border-bottom: 2px solid #333; 
+        }
+        
+        /* Scrollable Container for 10 rows */
+        #container {
+            max-height: 400px;
+            overflow-y: auto; /* Scrollbar if needed */
+            border-bottom: 1px solid #ddd;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-bottom: 1px solid #ddd;
+            padding: 5px;
+        }
+
+        .col-1 { width: 15%; font-size: 12px; font-weight: bold;} 
+        .col-2 { width: 45%; padding-right: 5px; } 
+        .col-3 { width: 40%; text-align: center; } 
+
+        input[type="text"] {
+            width: 90%; 
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #333;
+        }
+
+        .id-input { font-family: monospace; color: #007bff; }
+        .key-input { text-align: center; font-weight: bold; color: #d63384; caret-color: transparent; } /* caret-color hides blinking cursor */
+        
+        input:focus { outline: none; border-color: #007bff; background-color: #eef6ff; }
+        .saved { background-color: #eaffea !important; transition: background 0.5s; }
+        .error { background-color: #ffeaea !important; border-color: red !important; }
+
+        /* Footer & Buttons */
+        .footer { display: flex; justify-content: center; margin-top: 15px; }
+        
+        .reset-btn { 
+            padding: 10px 20px; background-color: #fff; border: 1px solid #000; 
+            border-radius: 10px; cursor: pointer; font-weight: bold; 
+        }
+        .reset-btn:hover { background-color: #e0e0e0; }
+
+        .cancel-btn {
+            background-color: #fff; border: none; margin-left: 10px; 
+            padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold;
+        }
+        .cancel-btn:hover { background-color: #f0f0f0; }
+
+        /* Accessibility / NVDA */
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+        
+        /* Status Box */
+        #error-box {
+            display: none; position: fixed; bottom: 60px; left: 5%; width: 90%;
+            background-color: #000; color: white; text-align: center; padding: 10px;
+            border-radius: 4px; font-size: 12px; z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="live-region" class="sr-only" aria-live="assertive"></div>
+
+    <h3>Shortcut Manager</h3>
+    <p>1. Type ID (Enter) &rarr; 2. Press Combo (e.g. Shift+1)</p>
+
+    <div class="header">
+        <div class="col-1">Shortcuts</div>
+        <div class="col-2">Button ID</div>
+        <div class="col-3">Key </div>
+    </div>
+
+    <div id="container"></div>
+
+    <div class="footer">
+        <button id="resetBtn" class="reset-btn">Reset All</button>
+        <button id="cancelBtn" class="cancel-btn">Cancel</button>
+    </div>
+    
+    <div id="error-box"></div>
+    <script src="popup.js"></script>
+</body>
+</html>
