@@ -15,6 +15,7 @@ const TRANSLATIONS = {
         emptyMsg: "No shortcuts yet. Click 'Pick Button' to select one.",
         placeholderId: "Enter ID or click Pick",
         placeholderKey: "Press Key..",
+        alshort: "Please use letters or numbers only",
         
         // Alerts
         deleteRow: "Delete this shortcut?",
@@ -45,7 +46,7 @@ const TRANSLATIONS = {
         emptyMsg: "कोई शॉर्टकट नहीं है। 'बटन चुनें' पर क्लिक करें।",
         placeholderId: "आईडी दर्ज करें",
         placeholderKey: "की (Key) दबाएं..",
-        
+        alshort: "कृपया केवल अक्षरों या अंकों का उपयोग करें।",
         // Alerts
         deleteRow: "क्या आप इस शॉर्टकट को हटाना चाहते हैं?",
         deleteAll: "क्या आप सभी शॉर्टकट हटाना चाहते हैं?",
@@ -75,7 +76,7 @@ const TRANSLATIONS = {
         emptyMsg: "अद्याप शॉर्टकट नाहीत. 'बटन निवडा' क्लिक करा.",
         placeholderId: "आयडी टाका",
         placeholderKey: "की (Key) दाबा..",
-        
+        alshort:"कृपया फक्त अक्षरे किंवा अंक वापरा.",
         // Alerts
         deleteRow: "हा शॉर्टकट हटवायचा का?",
         deleteAll: "तुम्हाला सर्व शॉर्टकट हटवायचे आहेत का?",

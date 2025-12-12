@@ -214,50 +214,17 @@ function exitPickerOnEsc(e) {
 }
 // Finalization
 function finalizeSelection(element) {
+    if (!element) return;
     const selector = generateSelector(element);
-    
+
     element.style.outline = '4px solid #00E5ff';
-    speak(t('selected'));
+    element.style.boxShadow = '0 0 10px #00E5FF';
+    element.style.transition = 'all 0.1s ease';
+    speak(t('Button selected. Now press your desired shortcut keys.'));
     disablePicker(); 
     recordShortcutForElement(selector, element);
 }
 
-    // document.addEventListener('mouseover', highlightElement, true);
-    // document.addEventListener('click', selectElement, true);
-    // document.addEventListener('keydown', exitPickerOnEsc, true);
-// function selectElement(e) {
-//     if (!pickingMode) return;
-//     e.preventDefault();
-//     e.stopPropagation();
-//     let target = e.target.closest('button, a, input, [role="button"]');
-//     if (!target) target = e.target;
-
-//     const selector = generateSelector(target);
-//     const currentDomain = window.location.hostname;
-//     target.style.outline = '4px solid #00E5FF';
-//     speak("Button selected. Now press your desired shortcut keys.");
-//     disablePicker(); 
-//     recordShortcutForElement(selector, target);
-// }
-
-// function generateSelector(el) {
-//     if (el.id) return '#' + el.id;
-//     if (el.getAttribute('aria-label')) return `[aria-label="${el.getAttribute('aria-label')}"]`;
-//     if (el.title) return `[title="${el.title}"]`;
-//     if (el.alt) return `[alt="${el.alt}"]`;
-
-//     let tagName = el.tagName.toLowerCase();
-//     let parent = el.parentElement;
-//     if (parent) {
-//         let siblings = parent.children;
-//         let index = 1;
-//         for (let sibling of siblings) {
-//             if (sibling === el) return `${tagName}:nth-child(${index})`;
-//             index++;
-//         }
-//     }
-//     return tagName;
-// }
 function generateSelector(el) {
     const ariaLabel = el.getAttribute('aria-label');
     if (ariaLabel) {
@@ -303,14 +270,18 @@ function recordShortcutForElement(selector,visualElement) {
         const isAlphanumeric = /^[a-zA-Z0-9]$/.test(e.key);
 
         if (!isAlphanumeric) {
-            speak(t("Please use letters or numbers only"));
-            
+            speak(t("alshort"));
+            showToast(t("alshort"));
             if (visualElement) {
-                const oldOutline = visualElement.style.outline;
                 visualElement.style.outline = '4px solid red'; 
-                setTimeout(() => visualElement.style.outline = oldOutline, 500);
-                return ;
+                visualElement.style.boxShadow = '0 0 10px red';
+
+                setTimeout(() => {
+                    visualElement.style.outline = '4px solid #00E5FF'; 
+                    visualElement.style.boxShadow = '0 0 10px #00E5FF';
+                }, 500);
             }
+            return; // Stop here! Do not save.
         }
         let combo = [];
         if (e.ctrlKey) combo.push('Ctrl');
@@ -321,14 +292,12 @@ function recordShortcutForElement(selector,visualElement) {
         combo.push(char);
 
         const finalKey = combo.join('+');
-
         const currentDomain = window.location.hostname;
         // Fetch FRESH data for this domain
         chrome.storage.local.get([currentDomain], (data) => {
             let config = data[currentDomain] || [];
-            // Check Duplicates in THIS site's config
-            const conflict = config.find(item => item.key === finalKey && item.id !== selector);
 
+            const conflict = config.find(item => item.key === finalKey && item.id !== selector);
             if (conflict) {
                 speak(t('conflict')); 
                 if (visualElement) {
@@ -345,13 +314,21 @@ function recordShortcutForElement(selector,visualElement) {
             } else {
                 config.push({ id: selector, key: finalKey });
             }
+            siteConfig = config; //instant reload
 
             // Save to specific domain key
             chrome.storage.local.set({ [currentDomain]: config }, () => {
                 document.removeEventListener('keydown', keyListener, true);
-                if (visualElement) visualElement.style.outline = '';
+                if (visualElement) {
+                    visualElement.style.outline = '4px solid #FFD700'; 
+                    visualElement.style.boxShadow = '0 0 15px #FFD700';
+                    setTimeout(() => {
+                        visualElement.style.outline = '';
+                        visualElement.style.boxShadow = '';
+                    }, 500);
+                }
                 speak(t('saved') + finalKey);
-                alert(t('saved') + finalKey);
+                showToast(t('saved') + finalKey);
             });
         });
     };
@@ -359,39 +336,51 @@ function recordShortcutForElement(selector,visualElement) {
 }
 // --- TOAST NOTIFICATION HELPER ---
 function showToast(message) {
-    // 1. Create the element
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.zIndex = '2147483647'; 
+    container.style.bottom = '30px'; 
+    container.style.left = '50%';
+    container.style.transform = 'translateX(-50%)';
+    // 2. Attach Shadow DOM (Isolates styles from the website)
+    const shadow = container.attachShadow({ mode: 'open' });
+    // 3. Create the toast inside the shadow
     const toast = document.createElement('div');
     toast.textContent = message;
+
+    const style = document.createElement('style');
+    style.textContent = `
+        div {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+    `;
+    shadow.appendChild(style);
+    shadow.appendChild(toast);
     
-    // 2. Style it (Floating black box at bottom center)
-    toast.style.position = 'fixed';
-    toast.style.bottom = '30px';
-    toast.style.left = '50%';
-    toast.style.transform = 'translateX(-50%)';
-    toast.style.backgroundColor = '#333';
-    toast.style.color = '#fff';
-    toast.style.padding = '12px 24px';
-    toast.style.borderRadius = '8px';
-    toast.style.fontSize = '14px';
-    toast.style.fontFamily = 'Segoe UI, sans-serif';
-    toast.style.zIndex = '10000'; // Make sure it's on top
-    toast.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
-    toast.style.opacity = '0';
-    toast.style.transition = 'opacity 0.3s ease';
+    if (document.body) {
+        document.body.appendChild(container);
+    } else {
+        console.error("Toast failed: document.body not ready");
+        return;
+    }
 
-    // 3. Add to page
-    document.body.appendChild(toast);
-
-    // 4. Animate In (Fade In)
+    // 6. Animate In
     requestAnimationFrame(() => {
         toast.style.opacity = '1';
     });
 
-    // 5. Remove after 3 seconds
     setTimeout(() => {
         toast.style.opacity = '0';
         setTimeout(() => {
-            document.body.removeChild(toast);
-        }, 300); // Wait for fade out to finish
+            container.remove();
+        }, 300);
     }, 3000);
 }

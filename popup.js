@@ -3,6 +3,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorBox = document.getElementById('error-box');
     const liveRegion = document.getElementById('live-region');
     const langSelect = document.getElementById('langSelect');
+    chrome.storage.local.get(null, (items) => {
+        console.log("📂 CURRENT STORAGE DATABASE:", items);
+    });
 
     let keyConfig = [];
     let currentDomain = '';
@@ -51,8 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tabs || tabs.length === 0) return;
 
         const activeTab = tabs[0];
-
-        // Handle Restricted Pages
         if (activeTab.url.startsWith('chrome://') || !activeTab.url.startsWith('http')) {
             container.innerHTML = `<div class="empty-msg" style="color:red; padding:15px;">
                 Please navigate to a real website (e.g., Google, YouTube) to use shortcuts.
@@ -158,10 +159,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 1. Load Data on Startup
-    chrome.storage.local.get(['keyConfig'], (result) => {
-        keyConfig = result.keyConfig || [];
-        renderRows();
-    });
+    // chrome.storage.local.get(['keyConfig'], (result) => {
+    //     keyConfig = result.keyConfig || [];
+    //     renderRows();
+    // });
 
     // 2. Render rows (Builds the list based on current data)
     function renderRows() {
