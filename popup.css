@@ -4,6 +4,35 @@ body {
     padding: 15px;
     background-color: #f9f9f9;
 }
+.main-header {
+    display: flex;
+    justify-content: space-between; /* Pushes Title left, Language right */
+    align-items: flex-end;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.title-section {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Override global centering for the header title */
+.title-section h3 {
+    margin: 0;
+    text-align: left; 
+    font-size: 18px;
+    color: #333;
+}
+
+/* Override global centering for the subtitle */
+.title-section .subtitle {
+    margin: 2px 0 0 0;
+    text-align: left;
+    font-size: 11px;
+    color: #666;
+}
 
 h3 {
     margin-top: 0;

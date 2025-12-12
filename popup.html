@@ -4,16 +4,27 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Nayan-deep Shortcut</title>
-     <link rel="stylesheet" href="popup.css" />
+    <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
 
     <div id="live-region" class="sr-only" aria-live="assertive"></div>
 
-    <h3>Nayan Deep</h3>
-    <p> Press Ctrl+Shift+U to close this extention </p>
+    <div>
+        <div class="Main-Header">
+            <h3 id="app-title" data-i18n="appName">">Nayan Deep</h3>
+            <p id="subtitlepara"> Press Ctrl+Shift+U to close this extention </p>
+        </div>
+        <div class="language-container">
+                
+                <select id="langSelect">
+                    <option value="en">English</option>
+                    <option value="hi">Hindi (हिंदी)</option>
+                    <option value="mr">Marathi (मराठी)</option>
+                </select>
+        </div>
+    </div>
 
-    
     <div class="btn-group">
         <button id="pickerBtn" class="picker-btn">&#x2316; Pick Button</button>
         <button id="addBtn" class="add-btn">+ Add Row</button>
