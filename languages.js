@@ -3,6 +3,7 @@
 const TRANSLATIONS = {
     // --- ENGLISH ---
     en: {
+        langCode: "en-US",
         // Popup UI
         title: "Nayan Deep",
         subtitle: "Press Ctrl+Shift+U to close",
@@ -16,6 +17,7 @@ const TRANSLATIONS = {
         placeholderId: "Enter ID or click Pick",
         placeholderKey: "Press Key..",
         alshort: "Please use letters or numbers only",
+        delshort: "Shortcut Deleted",
         
         // Alerts
         deleteRow: "Delete this shortcut?",
@@ -34,6 +36,7 @@ const TRANSLATIONS = {
 
     // --- HINDI (हिंदी) ---
     hi: {
+        langCode: "hi-IN",
         // Popup UI
         title: "नयन दीप",
         subtitle: "बंद करने के लिए Ctrl+Shift+U दबाएं",
@@ -47,6 +50,8 @@ const TRANSLATIONS = {
         placeholderId: "आईडी दर्ज करें",
         placeholderKey: "की (Key) दबाएं..",
         alshort: "कृपया केवल अक्षरों या अंकों का उपयोग करें।",
+        delshort: "शॉर्टकट हटायागया",
+
         // Alerts
         deleteRow: "क्या आप इस शॉर्टकट को हटाना चाहते हैं?",
         deleteAll: "क्या आप सभी शॉर्टकट हटाना चाहते हैं?",
@@ -64,6 +69,7 @@ const TRANSLATIONS = {
 
     // --- MARATHI (मराठी) ---
     mr: {
+        langCode: "mr-IN",
         // Popup UI
         title: "नयन दीप",
         subtitle: "बंद करण्यासाठी Ctrl+Shift+U दाबा",

@@ -14,6 +14,8 @@ announcer.style.cssText = 'position:absolute; width:1px; height:1px; overflow:hi
 document.body.appendChild(announcer);
 
 function speak(msg) {
+    const langCode = TRANSLATIONS[currentLang]?.langCode || 'en-US';
+    announcer.setAttribute('lang', langCode);
     announcer.textContent = '';
     setTimeout(() => { announcer.textContent = msg; }, 50);
 }
@@ -98,14 +100,14 @@ document.addEventListener('keydown', (e) => {
         if (btn) {
             btn.click();
             btn.focus();
-            speak("Clicked");
+            speak(t("clicked"));
             const originalOutline = btn.style.outline;
             btn.style.outline = "3px solid yellow";
             setTimeout(() => btn.style.outline = originalOutline, 200);
         } 
         else {
             console.log("Button not found:", match.id);
-            speak("Button not found on this page");
+            speak(t("notFound"));
         }
     }
 });
@@ -124,7 +126,7 @@ chrome.runtime.onMessage.addListener((msg,sender,sendResponse) => {
 function enablePicker() {
     pickingMode = true;
     document.body.style.cursor = 'crosshair';
-    speak("Picker Mode On. Click a button.");
+    speak(t("pickerOn"));
     document.addEventListener('mouseover', handleMouseHover, true);
     document.addEventListener('click', handleSelection, true);
 
@@ -138,6 +140,7 @@ function enablePicker() {
 function disablePicker() {
     pickingMode = false;
     document.body.style.cursor = 'default';
+    speak(t("pickerOff"))
 
     if (lastHighlighted) {
         lastHighlighted.style.outline = '';
@@ -220,7 +223,7 @@ function finalizeSelection(element) {
     element.style.outline = '4px solid #00E5ff';
     element.style.boxShadow = '0 0 10px #00E5FF';
     element.style.transition = 'all 0.1s ease';
-    speak(t('Button selected. Now press your desired shortcut keys.'));
+    speak(t('selected'));
     disablePicker(); 
     recordShortcutForElement(selector, element);
 }

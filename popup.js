@@ -88,6 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (langSelect) {
                 langSelect.value = currentLang;
             }
+            if (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang].langCode) {
+                document.documentElement.lang = TRANSLATIONS[currentLang].langCode;
+            }
             const subtitle = document.querySelector('.subtitle');
             if (subtitle) {
                 subtitle.innerText = `${currentDomain.replace('www.', '')}`;
@@ -103,7 +106,10 @@ document.addEventListener('DOMContentLoaded', () => {
         langSelect.addEventListener('change', (e) => {
             const selectedLang = e.target.value;
             currentLang = selectedLang; 
-            // C. Save to storage
+            if (TRANSLATIONS[selectedLang] && TRANSLATIONS[selectedLang].langCode) {
+                document.documentElement.lang = TRANSLATIONS[selectedLang].langCode;
+            }
+            
             chrome.storage.local.set({ appLanguage: selectedLang });
             updateUIText();
             renderRows();
@@ -157,14 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         
     }
-
-    // 1. Load Data on Startup
-    // chrome.storage.local.get(['keyConfig'], (result) => {
-    //     keyConfig = result.keyConfig || [];
-    //     renderRows();
-    // });
-
-    // 2. Render rows (Builds the list based on current data)
+    // Render rows (Builds the list based on current data)
     function renderRows() {
         container.innerHTML = '';
 
@@ -193,14 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
             idInput.value = item.id;
             col2.appendChild(idInput);
 
-            // // Domain Badge Display
-            // if (item.domain) {
-            //     const domainBadge = document.createElement('div');
-            //     domainBadge.className = 'domain-badge'; // We added CSS for this earlier
-            //     domainBadge.innerText = item.domain.replace('www.', ''); 
-            //     col2.appendChild(domainBadge);
-            // }
-
             // Col 3: Key Input
             const col3 = document.createElement('div');
             col3.className = 'col-3';
@@ -224,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (confirm(t('deleteRow'))) {
                     keyConfig.splice(index, 1); // Remove item from array
                     saveAndRender();
-                    announce(t('Shortcut Deleted'));
+                    announce(t('delshort'));
                 }
             });
             col4.appendChild(delBtn);
